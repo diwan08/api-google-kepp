@@ -13,7 +13,7 @@ module.exports = class bookController{
             if (error) {
                 throw new Api422Error("validate error", error.details)
             }
-            const{title ,description, publisher, publish_at}= value;
+            const{title ,description, publisher, publish_at,author_id, category_id}= value;
 
             await db.transaction(async function(trx){
 
@@ -24,7 +24,9 @@ module.exports = class bookController{
                         title ,
                         description,
                         publisher,
-                        publish_at
+                        publish_at,
+                        author_id,
+                        category_id
                     })
                     .catch(trx.rollback)
                 trx.commit
@@ -46,12 +48,12 @@ module.exports = class bookController{
             const book = await db("books as b")
                 .leftJoin("categories as c", "c.id", "b.category_id")
                 .leftJoin("authors as a", "a.id","b.author_id")
-                .select("b.books_id","b.title","b.publisher","b.publish_at","a.birthdate","c.category","a.name")
+                .select("b.books_id","b.title","b.publisher","b.publish_at","c.category","a.name","a.birthdate")
                 .limit(+limit)
                 .offset(+page * +limit - +limit)
                 .orderBy("b.created_at", order)
                 .where("b.title", "like", `%${seacrh}`)
-
+            console.log(book);
 
                 return res.json({
                     success: true,

@@ -10,9 +10,9 @@ exports.up = function(knex) {
     t.string("publisher", 50).notNullable();
     t.date("publish_at").notNullable();
     t.integer("author_id").unsigned().notNullable();
-    t.foreign("author_id").references().inTable("authors").onDelete("CASCADE");
+    t.foreign("author_id").references("id").inTable("authors").onDelete("CASCADE");
     t.integer("category_id").unsigned().notNullable();
-    t.foreign("category_id").references().inTable("categories").onDelete("CASCADE");
+    t.foreign("category_id").references("id").inTable("categories").onDelete("CASCADE");
     t.timestamps(true, true)
   })
 };
